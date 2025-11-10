@@ -1,0 +1,52 @@
+models:
+  - name: stg_sql_server_dbo__promos
+    description: "Promotions model including hashed IDs, standardized names, and default no_promo entry."
+    columns:
+      - name: promo_id
+        description: "Hashed promotion ID or md5('no_promo')."
+        tests:
+          - not_null
+          - unique
+
+      - name: promo_name
+        description: "Original promotion name or 'no_promo' placeholder."
+        tests:
+          - not_null
+
+      - name: discount
+        description: "Discount value, must be non-negative."
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "discount >= 0"
+
+      - name: status
+        description: "Promotion status (active/inactive)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["active", "inactive"]
+
+      - name: fivetran_synced
+        description: "Last Fivetran synchronization timestamp."
+        tests:
+          - not_null
+
+  - name: stg_sql_server_dbo__orders
+    description: "Orders model."
+    columns:
+      - name: order_id
+        description: "Unique identifier of the order."
+        tests:
+          - not_null
+          - unique
+
+      - name: shipping_service
+        description: "Courier service used for the shipment."
+
+      - name: promo_id
+        description: "Foreign key to stg_sql_server_dbo__promos.promo_id."
+        tests:
+          - relationships:
+                to: ref('stg_sql_server_dbo__promos')
+                field: promo_id
