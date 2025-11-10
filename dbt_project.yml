@@ -40,3 +40,9 @@ models:
     # Applies to all files under models/example/
     example:
       +materialized: table
+
+seeds:
+  +database: "ALUMNO4_DEV_BRONZE_DB"
+  +schema: "SEEDS"
+
+docs-paths: ["."]

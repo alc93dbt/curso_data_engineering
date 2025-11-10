@@ -1,0 +1,43 @@
+
+sources:
+
+  - name: google_sheets # name of the source 
+    schema: google_sheets # this is the schema our raw data lives in
+    database: ALUMNO4_DEV_BRONZE_DB # this is the name of our database
+
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+
+    freshness:
+      warn_after: {count: 800, period: day}
+      error_after: {count: 800, period: day}
+
+    tables:
+
+      - name: budget
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: _row
+            description: > 
+              Número de fila, asignado automáticamente al cargar los datos.
+          - name: product_id
+            description: >
+              Identificador único de producto. Relaciona con la tabla products.
+            tests:
+              - not_null
+              - relationships:
+                  to: source('sql_server_db','products')
+                  field: product_id
+          - name: quantity
+            description: >
+              Cantidad de unidades de productos compradas.
+          - name: month
+            description: >
+              Mes y año de la transacción. Formato YYYY-MM-DD.
+            tests:
+              - not_null
+          - name: _fivetran_synced 
+            description: >  
+              Hora a la que se hizo la carga.
