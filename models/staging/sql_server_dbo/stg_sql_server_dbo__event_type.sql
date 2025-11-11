@@ -1,12 +1,9 @@
-{{ config(materialized='view') }}
+{{ config(materialized="view") }}
 
-WITH src_events AS (
-    SELECT event_type
-    FROM {{ source('sql_server_dbo', 'events') }}
-)
+with src_events as (select event_type from {{ source("sql_server_dbo", "events") }})
 
-SELECT DISTINCT
-    md5(lower(trim(event_type))) AS event_type_id,
-    lower(trim(event_type)) AS event_type_name
-FROM src_events
-WHERE event_type IS NOT NULL AND trim(event_type) <> ''
+select distinct
+    {{ dbt_utils.generate_surrogate_key(["event_type"]) }} as event_type_id,
+    lower(trim(event_type)) as event_type_name
+from src_events
+where event_type is not null and trim(event_type) <> ''

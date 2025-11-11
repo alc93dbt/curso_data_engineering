@@ -7,7 +7,7 @@ WITH src_products AS (
 
 clean_products AS (
     SELECT
-        md5(product_id) AS product_id,
+        {{ dbt_utils.generate_surrogate_key(['product_id']) }} as product_id,
         INITCAP(TRIM(REGEXP_REPLACE(name, '[^a-zA-Z0-9 ]', ''))) AS product_name,
         CASE
             WHEN price IS NULL OR price < 0 THEN 0.00

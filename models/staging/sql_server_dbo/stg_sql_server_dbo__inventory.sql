@@ -7,7 +7,7 @@ WITH src_inventory AS (
 
 clean_inventory AS (
     SELECT
-        md5(product_id) AS product_id, 
+        {{ dbt_utils.generate_surrogate_key(['product_id']) }} as product_id, 
         COALESCE(CAST(inventory AS INTEGER), 0) AS stock_units
     FROM src_inventory
 )

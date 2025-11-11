@@ -6,6 +6,6 @@ with src_status as (
 )
 
 select distinct
-    md5(status) as status_id,
+    {{ dbt_utils.generate_surrogate_key(['status']) }} as status_id,,
     status as status_name
 from src_status

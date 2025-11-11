@@ -7,7 +7,7 @@ WITH src_events AS (
 
 cleaned_events AS (
     SELECT
-        md5(event_id) AS event_id,
+        {{ dbt_utils.generate_surrogate_key(['event_id']) }} as event_id,,
 
         -- Limpieza de URL
         lower(trim(page_url)) AS page_url_clean,
@@ -24,11 +24,11 @@ cleaned_events AS (
 
         lower(trim(event_type)) AS event_type,
 
-        --Normalización claves foráneas
-        md5(coalesce(user_id, 'no_user')) AS user_id,
-        md5(coalesce(product_id, 'no_product')) AS product_id,
-        md5(coalesce(session_id, 'no_session')) AS session_id,
-        md5(coalesce(order_id, 'no_order')) AS order_id,
+        {{ dbt_utils.generate_surrogate_key(['user_id']) }} as user_id,
+        {{ dbt_utils.generate_surrogate_key(['product_id']) }} as product_id,
+        {{ dbt_utils.generate_surrogate_key(['session_id']) }} as session_id,
+        {{ dbt_utils.generate_surrogate_key(['oder_id']) }} as order_id,
+
         
         convert_timezone('UTC', created_at) AS created_at,
         _fivetran_deleted AS fivetran_deleted,

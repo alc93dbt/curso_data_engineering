@@ -11,8 +11,8 @@ WITH src_countries AS (
 
 countries AS (
     SELECT DISTINCT
-       md5(lower(country)) AS country_id,
-       md5(address_id) AS address_id,
+       {{ dbt_utils.generate_surrogate_key(['country']) }} as country_id,
+       {{ dbt_utils.generate_surrogate_key(['address_id']) }} as address_id,
        lower(country) AS country,
     FROM src_countries)
 

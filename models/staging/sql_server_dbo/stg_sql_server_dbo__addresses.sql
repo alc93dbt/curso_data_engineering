@@ -11,9 +11,8 @@ WITH src_addresses AS (
 
 transformed_addresses AS (
     SELECT
-       md5(address_id) AS address_id,
-       country,
-       md5(lower(country)) AS country_id,
+       {{ dbt_utils.generate_surrogate_key(['address_id']) }} as address_id,
+       {{ dbt_utils.generate_surrogate_key(['country']) }} as country_id,
        _fivetran_deleted AS fivetran_deleted,
        CONVERT_TIMEZONE('UTC',_fivetran_synced) AS fivetran_synced
     FROM src_addresses)

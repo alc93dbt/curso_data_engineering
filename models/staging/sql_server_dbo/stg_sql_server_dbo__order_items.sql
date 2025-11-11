@@ -11,8 +11,8 @@ WITH src_order_items AS (
 
 transformed_order_items AS (
     SELECT
-        md5(order_id) AS order_id,
-        md5(product_id) AS product_id,
+        {{ dbt_utils.generate_surrogate_key(['order_id']) }} as order_id,,
+        {{ dbt_utils.generate_surrogate_key(['product_id']) }} as product_id,
         CAST(quantity AS INTEGER) AS quantity,
         _fivetran_deleted AS fivetran_deleted,
         _fivetran_synced AS fivetran_synced
