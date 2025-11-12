@@ -11,8 +11,8 @@ WITH src_state AS (
 
 state AS (
     SELECT DISTINCT
-       md5(lower(country)) AS country_id,
-       md5(address_id) AS address_id,
+       {{ surrogate_key(['country']) }} as country_id,
+       {{ surrogate_key(['address_id']) }} as address_id,
        lower(state) AS state
     FROM src_state)
 

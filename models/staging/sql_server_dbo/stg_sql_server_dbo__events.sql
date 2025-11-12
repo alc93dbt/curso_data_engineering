@@ -7,7 +7,7 @@ WITH src_events AS (
 
 cleaned_events AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['event_id']) }} as event_id,,
+        {{ surrogate_key(['event_id']) }} as event_id,,
 
         -- Limpieza de URL
         lower(trim(page_url)) AS page_url_clean,

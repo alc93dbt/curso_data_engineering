@@ -11,7 +11,7 @@ WITH src_promos AS (
 
 renamed_promo AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['promo_id']) }} as promo_id,,
+        {{ surrogate_key(['promo_id']) }} as promo_id,
         promo_id AS promo_name,
         CAST(discount AS FLOAT) AS discount,
         lower(status) AS status,
@@ -22,7 +22,7 @@ renamed_promo AS (
 
 no_promo AS (
     SELECT 
-        md5('no_promo') AS promo_id,
+        {{ surrogate_key(['no_promo']) }} as promo_id,
         'no_promo' AS promo_name,
         0.0 AS discount,
         'inactive' AS status,

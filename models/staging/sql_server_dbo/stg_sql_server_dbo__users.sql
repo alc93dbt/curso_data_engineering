@@ -11,9 +11,9 @@ WITH src_users AS (
 
 transformed_users AS (
     SELECT
-        md5(user_id) AS user_id,
+        {{ surrogate_key(['user_id']) }} as user_id,
         CONVERT_TIMEZONE('UTC', updated_at) AS updated_at,
-        md5(address_id) as address_id,
+        {{ surrogate_key(['address_id']) }} as address_id,
         lower(last_name) as last_name, 
         CONVERT_TIMEZONE('UTC', created_at) AS created_at,
         CASE

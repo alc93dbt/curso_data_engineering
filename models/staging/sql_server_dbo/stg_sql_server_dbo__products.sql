@@ -7,12 +7,13 @@ WITH src_products AS (
 
 clean_products AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['product_id']) }} as product_id,
+        {{ surrogate_key(['product_id']) }} as product_id,
         INITCAP(TRIM(REGEXP_REPLACE(name, '[^a-zA-Z0-9 ]', ''))) AS product_name,
         CASE
             WHEN price IS NULL OR price < 0 THEN 0.00
             ELSE CAST(price AS DECIMAL(10, 2))
         END AS price,
+        inventory,
         _fivetran_deleted AS fivetran_deleted,
         CONVERT_TIMEZONE('UTC', _fivetran_synced) AS fivetran_synced
     FROM src_products

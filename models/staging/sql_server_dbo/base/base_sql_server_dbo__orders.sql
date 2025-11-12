@@ -5,21 +5,21 @@ with
 
     transformed_orders as (
         select
-            {{ dbt_utils.generate_surrogate_key(["order_id"]) }} as order_id,
-            {{ dbt_utils.generate_surrogate_key(["status"]) }} as status_id,
-            {{ dbt_utils.generate_surrogate_key(["shipping_service"]) }}
+            {{ surrogate_key(["order_id"]) }} as order_id,
+            {{ surrogate_key(["status"]) }} as status_id,
+            {{ surrogate_key(["shipping_service"]) }}
             as shipping_service_id,
             cast(shipping_cost as decimal(10, 2)) as shipping_cost,
-            {{ dbt_utils.generate_surrogate_key(["address_id"]) }} as address_id,
+            {{ surrogate_key(["address_id"]) }} as address_id,
             created_at,
             {{
-                dbt_utils.generate_surrogate_key(
+                surrogate_key(
                     ["coalesce(cast(promo_id as varchar), ''), 'no_promo')"]
                 )
             }} as promo_id,
             estimated_delivery_at,
             cast(order_cost as decimal(10, 2)) as order_cost,
-            {{ dbt_utils.generate_surrogate_key(["user_id"]) }} as user_id,,
+            {{ surrogate_key(["user_id"]) }} as user_id,
             cast(order_total as decimal(10, 2)) as order_total,
             delivered_at,
             tracking_id,
